@@ -19,6 +19,36 @@ interface DelinquencyData {
   balance: number;
 }
 
+const dataSources = {
+  creditScore: {
+    name: 'TransUnion Credit Bureau Data',
+    url: 'https://www.transunion.ca/lenders/mortgage-delinquency'
+  },
+  ltv: {
+    name: 'OSFI Residential Mortgage Data',
+    url: 'https://www.osfi-bsif.gc.ca/Eng/fi-if/rtn/Pages/default.aspx'
+  }
+};
+
+const actualPortfolioData = {
+  creditScoreDistribution: [
+    { score: '800+', actual: 25, benchmark: 20, moderate: 15, severe: 10, extreme: 5 },
+    { score: '750-799', actual: 30, benchmark: 25, moderate: 20, severe: 15, extreme: 10 },
+    { score: '700-749', actual: 25, benchmark: 30, moderate: 35, severe: 40, extreme: 45 },
+    { score: '650-699', actual: 15, benchmark: 20, moderate: 25, severe: 30, extreme: 35 },
+    { score: '<650', actual: 5, benchmark: 5, moderate: 5, severe: 5, extreme: 5 }
+  ],
+  ltvDistribution: [
+    { range: '<50%', actual: 20, benchmark: 15, moderate: 10, severe: 5, extreme: 3 },
+    { range: '50-60%', actual: 25, benchmark: 20, moderate: 15, severe: 10, extreme: 7 },
+    { range: '60-70%', actual: 30, benchmark: 35, moderate: 40, severe: 45, extreme: 50 },
+    { range: '70-80%', actual: 20, benchmark: 25, moderate: 30, severe: 35, extreme: 35 },
+    { range: '>80%', actual: 5, benchmark: 5, moderate: 5, severe: 5, extreme: 5 }
+  ],
+  totalExposure: 10000000000,
+  totalAccounts: 50000
+};
+
 export default function RetailStressAnalysis({ selectedStressLevel, onAnalysisComplete }: RetailStressAnalysisProps) {
   const [isSimulating, setIsSimulating] = useState(false);
   const [delinquencyData, setDelinquencyData] = useState<DelinquencyData[]>([]);
@@ -212,9 +242,6 @@ export default function RetailStressAnalysis({ selectedStressLevel, onAnalysisCo
       {/* Monte Carlo Results */}
       <MonteCarloResults 
         macroFactors={mcInputs.macroFactors}
-        iterations={mcInputs.iterations}
-        confidenceLevel={mcInputs.confidenceLevel}
-        horizonMonths={mcInputs.horizonMonths}
       />
     </div>
   );
