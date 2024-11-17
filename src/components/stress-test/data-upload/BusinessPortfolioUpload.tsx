@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, Download, Info, Check } from 'lucide-react';
+import { useAuth } from '../../../context/AuthContext';
+import UploadHistory, { UploadRecord } from './UploadHistory';
 
 interface BusinessPortfolioData {
   loan_id: string;
@@ -22,7 +24,9 @@ interface BusinessPortfolioUploadProps {
 }
 
 export default function BusinessPortfolioUpload({ onDataUpload }: BusinessPortfolioUploadProps) {
+  const { user } = useAuth();
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadHistory, setUploadHistory] = useState<UploadRecord[]>([]);
 
   const downloadTemplate = () => {
     const headers = [
@@ -75,6 +79,16 @@ export default function BusinessPortfolioUpload({ onDataUpload }: BusinessPortfo
           postal_code: 'M5J2T3'
         }
       ];
+
+      // Add to upload history
+      const newUpload: UploadRecord = {
+        fileName: file.name,
+        uploadedAt: new Date().toISOString(),
+        uploadedBy: `${user?.firstName} ${user?.lastName}`,
+        recordCount: sampleData.length
+      };
+
+      setUploadHistory(prev => [newUpload, ...prev]);
       onDataUpload(sampleData);
     }
   };
@@ -127,6 +141,8 @@ export default function BusinessPortfolioUpload({ onDataUpload }: BusinessPortfo
           </label>
         </div>
       </div>
+
+      <UploadHistory records={uploadHistory} />
     </div>
   );
 }
