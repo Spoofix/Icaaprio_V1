@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, Download, Info, Check } from 'lucide-react';
+import { useAuth } from '../../../context/AuthContext';
+import UploadHistory, { UploadRecord } from './UploadHistory';
 
 interface DelinquencyData {
   reporting_date: string;
@@ -21,7 +23,9 @@ interface HistoricalDelinquencyUploadProps {
 }
 
 export default function HistoricalDelinquencyUpload({ onDataUpload }: HistoricalDelinquencyUploadProps) {
+  const { user } = useAuth();
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadHistory, setUploadHistory] = useState<UploadRecord[]>([]);
 
   const downloadTemplate = () => {
     const headers = [
@@ -72,6 +76,16 @@ export default function HistoricalDelinquencyUpload({ onDataUpload }: Historical
           house_price_index: 185.5
         }
       ];
+
+      // Add to upload history
+      const newUpload: UploadRecord = {
+        fileName: file.name,
+        uploadedAt: new Date().toISOString(),
+        uploadedBy: `${user?.firstName} ${user?.lastName}`,
+        recordCount: sampleData.length
+      };
+
+      setUploadHistory(prev => [newUpload, ...prev]);
       onDataUpload(sampleData);
     }
   };
@@ -124,6 +138,8 @@ export default function HistoricalDelinquencyUpload({ onDataUpload }: Historical
           </label>
         </div>
       </div>
+
+      <UploadHistory records={uploadHistory} />
     </div>
   );
 }
