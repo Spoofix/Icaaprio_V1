@@ -136,7 +136,7 @@ export default function Dashboard() {
         <div className="p-6 bg-white rounded-lg shadow-sm dark:bg-gray-800">
           <h2 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
             <FileText className="w-5 h-5 mr-2" />
-            Recent ICAAPsss
+            Recent ICAAPs
           </h2>
           <div className="space-y-4">
             {recentICAAPList.map((icaap) => (
