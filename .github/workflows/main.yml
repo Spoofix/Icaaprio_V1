@@ -26,7 +26,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /var/www/html/Icaaprio_V1    
+          cd /var/www/html/fe/Icaaprio_V1    
           sudo git pull     
                     
           cat <<EOF > .env
