@@ -26,6 +26,10 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
+          cd /var/www/html/fe
+          sudo rm -R assets
+          sudo rm index.html
+          
           cd /var/www/html/fe/Icaaprio_V1    
           sudo git pull     
                     
@@ -36,7 +40,7 @@ jobs:
           VITE_ENABLE_ADMIN=${{ secrets.VITE_ENABLE_ANALYTICS }}
           VITE_CACHE_DURATION=${{ secrets.VITE_CACHE_DURATION }}
           EOF
-
+          sudo rm * dist
           npm install
           npm run build
           cd dist  
