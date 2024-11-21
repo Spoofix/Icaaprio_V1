@@ -37,7 +37,7 @@ jobs:
           VITE_CACHE_DURATION=${{ secrets.VITE_CACHE_DURATION }}
           EOF
 
-          npm install --force
-          npm run build --force
+          npm install
+          npm run build
           cd dist  
           sudo mv * ../../
