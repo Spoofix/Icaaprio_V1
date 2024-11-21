@@ -26,12 +26,17 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /var/www/html/fe
-          sudo rm -R assets
-          sudo rm index.html
+          set -e
+          cd /var/www/html/fe || exit
+          if [ -d "assets" ]; then
+            sudo rm -R assets
+          fi
+          if [ -f "index.html" ]; then
+            sudo rm index.html
+          fi
           
-          cd /var/www/html/fe/Icaaprio_V1    
-          sudo git pull     
+          cd /var/www/html/fe/Icaaprio_V1 || exit  
+          sudo git pull || exit
                     
           cat <<EOF > .env
           VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
@@ -40,7 +45,9 @@ jobs:
           VITE_ENABLE_ADMIN=${{ secrets.VITE_ENABLE_ANALYTICS }}
           VITE_CACHE_DURATION=${{ secrets.VITE_CACHE_DURATION }}
           EOF
-          sudo rm * dist
+          if [ -d "dist" ]; then
+            sudo rm -rf dist || true
+          fi
           npm install
           npm run build
           cd dist  
